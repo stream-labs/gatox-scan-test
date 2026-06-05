@@ -1,0 +1,8 @@
+# SAFE: pull_request_target but does NOT check out the PR head — runs base code only.
+name: Safe PRT No Checkout
+on: pull_request_target
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "labeling PR, no attacker code checked out"
