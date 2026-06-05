@@ -1,0 +1,12 @@
+name: Deploy handler
+on:
+  deployment_status:
+
+jobs:
+  handle-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process deployment
+        run: |
+          echo "Deploying ${{ github.event.deployment.environment }}"
+          echo "Status: ${{ github.event.deployment_status.description }}"
