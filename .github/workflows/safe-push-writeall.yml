@@ -1,0 +1,10 @@
+# SAFE: write-all permissions but on a non-attacker trigger (push) — should NOT be
+# flagged excessive_permissions (our visitor only flags risky/untrusted triggers).
+name: Safe Push WriteAll
+on: [push]
+permissions: write-all
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
