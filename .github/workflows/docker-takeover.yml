@@ -1,0 +1,7 @@
+name: Docker Takeover
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker://ghcr.io/ocean-build/some-tool:latest   # claimable ghcr namespace
