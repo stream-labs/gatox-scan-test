@@ -1,0 +1,20 @@
+# VULNERABLE: Pwn Request - checks out PR code and runs it
+name: Vulnerable PR Build
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # VULNERABLE: attacker-controlled ref
+
+      - name: Install dependencies
+        run: npm install  # VULNERABLE: runs attacker's package.json
+
+      - name: Run tests
+        run: npm test
