@@ -1,0 +1,14 @@
+name: Error continue leak
+on:
+  pull_request_target:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fragile step
+        continue-on-error: true
+        env:
+          MY_SECRET: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          some-command-that-may-fail
