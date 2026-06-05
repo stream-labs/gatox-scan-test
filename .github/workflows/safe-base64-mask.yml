@@ -1,0 +1,9 @@
+# SAFE-ish: base64 of a secret — GitHub masks base64 too, so this is NOT a working
+# log-masking bypass (we calibrated this out). Should NOT fire log_masking_bypass.
+name: Safe Base64
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ secrets.DEPLOY_TOKEN }}" | base64
