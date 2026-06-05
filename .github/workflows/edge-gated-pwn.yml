@@ -1,0 +1,15 @@
+# EDGE: pwn-request shape BUT guarded by an author_association permission gate.
+# gato-x should detect the gate and downgrade (not a clean ZERO_CLICK).
+name: Edge Gated Pwn
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+jobs:
+  build:
+    if: github.event.pull_request.author_association == 'OWNER' || github.event.pull_request.author_association == 'MEMBER'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - run: npm install
