@@ -1,0 +1,9 @@
+# EDGE: references an action under a RENAMED/freed namespace (ocean-build) — claimable.
+# Tests the 404+301-rename takeover signal (needs live API).
+name: Edge Renamed Takeover
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ocean-build/some-ci-action@v1
