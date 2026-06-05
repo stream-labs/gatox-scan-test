@@ -1,0 +1,9 @@
+# SAFE: plain CI on push, first-party SHA-pinned action, no untrusted input. No findings.
+name: Benign CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
