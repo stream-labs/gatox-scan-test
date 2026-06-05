@@ -1,0 +1,15 @@
+name: Lab Issue Processor
+on:
+  issue_comment:
+    types: [created]
+env:
+  COMMENT_BODY: ${{ github.event.comment.body }}
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_KEY: ${{ secrets.LAB_SECRET }}
+    steps:
+      - name: Process comment
+        run: |
+          echo "Processing: $COMMENT_BODY"
