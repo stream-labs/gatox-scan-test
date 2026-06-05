@@ -1,0 +1,13 @@
+name: PR body gate
+on:
+  pull_request_target:
+
+jobs:
+  deploy:
+    if: contains(github.event.pull_request.body, 'DEPLOY')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        env:
+          TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: echo "deploying"
