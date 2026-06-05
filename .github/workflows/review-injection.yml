@@ -1,0 +1,9 @@
+name: Review Injection
+on:
+  pull_request_review:
+    types: [submitted]
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Review ${{ github.event.review.body }}"
