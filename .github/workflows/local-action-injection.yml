@@ -1,0 +1,10 @@
+name: Local Action Injection
+on: [pull_request]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/actions/build-helper   # missing local action → injectable via PR
