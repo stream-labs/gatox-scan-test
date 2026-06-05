@@ -1,0 +1,12 @@
+name: Deploy On Run
+on:
+  workflow_run:
+    workflows: [PR Artifact Build]
+    types: [completed]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: app }
+      - run: bash dist/run.sh
