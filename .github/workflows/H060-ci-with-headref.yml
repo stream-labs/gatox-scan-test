@@ -1,0 +1,22 @@
+# LAB VICTIM (H060) — CI workflow with head_ref in concurrency group.
+# Common pattern: use head_ref to deduplicate CI runs per branch.
+name: Lab CI
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        env:
+          RUN_ID: ${RUN_ID}
+        run: |
+          echo "=== CI (run ${RUN_ID}) ==="
+          echo "Testing branch: ${{ github.head_ref }}"
