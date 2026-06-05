@@ -1,0 +1,22 @@
+# VULNERABLE: GITHUB_ENV injection
+name: Vulnerable GitHub Env
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set branch from comment
+        run: |
+          # VULNERABLE: Attacker-controlled input written to GITHUB_ENV
+          echo "BRANCH=${{ github.event.comment.body }}" >> $GITHUB_ENV
+
+      - name: Use the variable
+        run: |
+          echo "Processing branch: $BRANCH"
+          # Attacker can inject: BRANCH=foo
+          # PATH=/tmp/evil:$PATH
+          # Which overwrites PATH for subsequent steps
