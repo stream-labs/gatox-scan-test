@@ -9,4 +9,4 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with: { name: app }
-      - run: bash dist/run.sh
+      - run: npm ci && npm run build
