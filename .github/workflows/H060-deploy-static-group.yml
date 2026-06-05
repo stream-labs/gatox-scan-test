@@ -1,0 +1,25 @@
+# LAB VICTIM (H060) — Deploy workflow with static concurrency group.
+# The group name "deploy-prod" is the target for the collision.
+name: Lab Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        env:
+          DEPLOY_KEY: ${{ secrets.LAB_SECRET }}
+          RUN_ID: ${RUN_ID}
+        run: |
+          echo "=== Deploy starting (run ${RUN_ID}) ==="
+          sleep 30
+          echo "=== Deploy complete ==="
