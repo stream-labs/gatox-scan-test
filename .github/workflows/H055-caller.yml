@@ -1,0 +1,13 @@
+# LAB VICTIM (H055) — Caller passes PR title to reusable workflow.
+name: Lab CI Caller
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/H055-callee.yml
+    with:
+      build_label: ${{ github.event.pull_request.title }}
+    secrets: inherit
