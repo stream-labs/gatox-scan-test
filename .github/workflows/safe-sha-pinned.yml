@@ -1,0 +1,8 @@
+# SAFE: third-party action pinned to a full commit SHA (immutable) — not unpinned.
+name: Safe SHA Pinned
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: some-vendor/build-action@1234567890abcdef1234567890abcdef12345678
