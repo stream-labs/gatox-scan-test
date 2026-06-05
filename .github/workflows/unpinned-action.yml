@@ -1,0 +1,13 @@
+# VULNERABLE: third-party action pinned to a mutable tag (not a SHA)
+name: Vulnerable Unpinned Action
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4                  # first-party — not flagged
+      - uses: some-vendor/build-action@v2          # VULNERABLE: mutable tag, third-party
+      - uses: another/tool@main                    # VULNERABLE: branch ref, third-party
+      - uses: pinned/ok@1111111111111111111111111111111111111111  # SHA-pinned — not flagged
