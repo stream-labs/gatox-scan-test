@@ -1,0 +1,16 @@
+# VULNERABLE: Weak actor-based gate guarding a secret
+name: Vulnerable Weak Conditional Gate
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  privileged:
+    runs-on: ubuntu-latest
+    # VULNERABLE: github.actor can be spoofed via account rename
+    if: github.actor == 'maintainer'
+    steps:
+      - name: Use a secret behind a spoofable gate
+        run: |
+          echo "Deploying with ${{ secrets.DEPLOY_TOKEN }}"
