@@ -1,0 +1,27 @@
+# VULNERABLE: Untrusted PR can upload an artifact later consumed by another job
+name: Vulnerable Artifact Overwrite
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # VULNERABLE: artifact produced from untrusted PR code
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: ./dist
+
+  consume:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # VULNERABLE: downloads the attacker-influenced artifact under the same name
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+      - run: ./dist/run.sh
