@@ -1,0 +1,28 @@
+# LAB VICTIM (H055) — Callee interpolates input into env: block.
+# Developer assumed build_label is safe metadata for logging.
+name: Lab Build Worker
+
+on:
+  workflow_call:
+    inputs:
+      build_label:
+        type: string
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_LABEL: ${{ inputs.build_label }}
+      DEPLOY_KEY: ${{ secrets.LAB_SECRET }}
+      RUN_ID: ${RUN_ID}
+    steps:
+      - name: Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build
+        run: |
+          echo "=== Build (run ${RUN_ID}) ==="
+          echo "Label: $BUILD_LABEL"
+          node -e "console.log('build complete')"
