@@ -1,0 +1,21 @@
+# VULNERABLE: OIDC id-token exposure on an attacker-reachable trigger
+name: Vulnerable OIDC Exposure
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  id-token: write   # VULNERABLE: OIDC token mintable from untrusted PR context
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to cloud via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/deploy
+          aws-region: us-east-1
