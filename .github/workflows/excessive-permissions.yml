@@ -1,0 +1,14 @@
+# VULNERABLE: broad write token permissions on an untrusted trigger
+name: Vulnerable Excessive Permissions
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions: write-all      # VULNERABLE: every token scope writable on an attacker-reachable trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo build
