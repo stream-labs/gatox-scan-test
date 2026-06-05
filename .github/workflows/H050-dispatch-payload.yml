@@ -1,0 +1,20 @@
+# LAB VICTIM (H050) — repository_dispatch client_payload injection.
+# Workflow processes a deploy command from an automation system.
+name: Lab Deploy Trigger
+
+on:
+  repository_dispatch:
+    types: [deploy]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process deploy command
+        env:
+          DEPLOY_KEY: ${{ secrets.LAB_SECRET }}
+          RUN_ID: ${RUN_ID}
+        run: |
+          echo "=== Deploy triggered (run ${RUN_ID}) ==="
+          echo "Target: ${{ github.event.client_payload.target }}"
+          echo "Version: ${{ github.event.client_payload.version }}"
