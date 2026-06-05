@@ -1,0 +1,20 @@
+# P0: GITHUB_OUTPUT injection vulnerability
+# Writes attacker-controlled input to step outputs
+name: GitHub Output Injection Test
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  vulnerable-output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set vulnerable output
+        id: vuln
+        run: |
+          echo "result=${{ github.event.comment.body }}" >> $GITHUB_OUTPUT
+
+      - name: Use the output (could be dangerous)
+        run: |
+          echo "The result is: ${{ steps.vuln.outputs.result }}"
