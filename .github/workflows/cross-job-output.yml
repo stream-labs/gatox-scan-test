@@ -1,0 +1,21 @@
+name: Cross-job outputs
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    outputs:
+      title: ${{ steps.get.outputs.title }}
+    steps:
+      - id: get
+        run: |
+          echo "title=${{ github.event.comment.body }}" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: extract
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Processing: ${{ needs.extract.outputs.title }}"
