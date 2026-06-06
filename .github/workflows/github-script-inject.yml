@@ -1,0 +1,15 @@
+# H068 - actions/github-script with expression injection
+name: H068 github-script inject
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const body = \`\${{ github.event.comment.body }}\`;
+            console.log("Comment: " + body);
