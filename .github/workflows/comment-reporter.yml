@@ -1,0 +1,23 @@
+# LAB VICTIM (H084) — workflow_run consumer uses display_title in run:.
+# display_title was populated by run-name: in the triggering workflow,
+# which used ${{ github.event.comment.body }}. Scanner classifies this
+# as PREVIOUS_CONTRIBUTOR but it's actually ZERO_CLICK.
+name: H084 Comment Reporter
+
+on:
+  workflow_run:
+    workflows: ["H084 Comment Handler"]
+    types: [completed]
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    env:
+      API_TOKEN: ${{ secrets.LAB_SECRET }}
+      RUN_ID: ${RUN_ID}
+    steps:
+      - name: Generate report
+        run: |
+          echo "=== H084 display_title chain (run ${RUN_ID}) ==="
+          TITLE="${{ github.event.workflow_run.display_title }}"
+          echo "Report for: $TITLE"
