@@ -1,0 +1,16 @@
+# LAB VICTIM (H084) — run-name populates display_title from attacker input.
+# Workflow A: issue_comment → run-name with comment.body → display_title set.
+# Workflow B consumes display_title. Two-hop injection chain.
+name: H084 Comment Handler
+run-name: "${{ github.event.comment.body }}"
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log comment
+        run: echo "Comment handled"
