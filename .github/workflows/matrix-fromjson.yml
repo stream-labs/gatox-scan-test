@@ -1,0 +1,25 @@
+# LAB VICTIM (H082) — fromJSON() matrix taint laundering.
+# Attacker comments JSON array on issue → fromJSON() parses into matrix →
+# ${{ matrix.task }} in run: interpolates attacker value. Scanner blind:
+# matrix.* not in UNSAFE_CONTEXTS or check_sus PREFIX_VALUES.
+name: H082 Dynamic Matrix
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: ${{ fromJSON(github.event.comment.body) }}
+      fail-fast: false
+    env:
+      API_TOKEN: ${{ secrets.LAB_SECRET }}
+      RUN_ID: ${RUN_ID}
+    steps:
+      - name: Execute task
+        run: |
+          echo "=== H082 matrix taint (run ${RUN_ID}) ==="
+          echo "Task: ${{ matrix.task }}"
