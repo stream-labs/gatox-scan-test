@@ -1,0 +1,14 @@
+name: H079 Event Logger
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    env:
+      NOTIFY_TOKEN: ${{ secrets.LAB_SECRET }}
+    steps:
+      - name: Log event
+        run: |
+          EVENT='${{ toJSON(github.event.comment) }}'
+          echo "Event logged"
