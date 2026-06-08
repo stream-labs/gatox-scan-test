@@ -1,0 +1,15 @@
+name: H075 Comment Processor
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_KEY: ${{ secrets.LAB_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/echo-msg
+        with:
+          message: ${{ github.event.comment.body }}
+          prefix: COMMENT
