@@ -1,0 +1,24 @@
+name: H080 Not-Failure Gate
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    if: github.event.comment.author_association == 'MEMBER'
+    outputs:
+      approved: ${{ steps.check.outputs.approved }}
+    steps:
+      - id: check
+        run: echo "approved=true" >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: gate
+    if: ${{ !failure() }}
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_TOKEN: ${{ secrets.LAB_SECRET }}
+    steps:
+      - name: Deploy
+        run: |
+          echo "Gate: ${{ needs.gate.outputs.approved }}"
+          echo "Comment: ${{ github.event.comment.body }}"
