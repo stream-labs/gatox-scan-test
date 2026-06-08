@@ -1,0 +1,15 @@
+name: Echo Message
+description: Processes and logs a message
+inputs:
+  message:
+    description: Message to process
+    required: true
+  prefix:
+    description: Log prefix
+    required: false
+    default: MSG
+runs:
+  using: composite
+  steps:
+    - run: echo "[${{ inputs.prefix }}] ${{ inputs.message }}"
+      shell: bash
