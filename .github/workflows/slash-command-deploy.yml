@@ -1,0 +1,18 @@
+name: H076 Deploy Bot
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  deploy:
+    if: contains(github.event.comment.body, '/deploy')
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_TOKEN: ${{ secrets.LAB_SECRET }}
+    steps:
+      - name: Parse deploy command
+        run: |
+          echo "Deploy Bot"
+          ARGS="${{ github.event.comment.body }}"
+          echo "Deploy command received: $ARGS"
+          TARGET=$(echo "$ARGS" | awk "{print \$2}")
+          echo "Deploying to: $TARGET"
