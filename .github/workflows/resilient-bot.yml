@@ -1,0 +1,35 @@
+# LAB VICTIM (H083) — continue-on-error: true gate bypass.
+# checkCollaborator step fails for outsiders (404) but continue-on-error
+# swallows the failure → job continues → injection step runs with secrets.
+# Scanner sets approval_gate because of permission_check tag, but the
+# gate is meaningless.
+name: H083 Resilient Bot
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    env:
+      API_TOKEN: ${{ secrets.LAB_SECRET }}
+      RUN_ID: ${RUN_ID}
+    steps:
+      - name: check-perms
+        id: auth
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.checkCollaborator({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.actor
+            });
+            core.info('Collaborator check passed');
+      - name: process-command
+        run: |
+          echo "=== H083 continue-on-error bypass (run ${RUN_ID}) ==="
+          CMD="${{ github.event.comment.body }}"
+          echo "Processing: $CMD"
