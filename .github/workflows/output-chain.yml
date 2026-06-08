@@ -1,0 +1,22 @@
+name: H081 Comment Processor
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    outputs:
+      command: ${{ steps.extract.outputs.cmd }}
+    steps:
+      - id: extract
+        run: echo "cmd=${{ github.event.comment.body }}" >> "$GITHUB_OUTPUT"
+  execute:
+    needs: parse
+    runs-on: ubuntu-latest
+    env:
+      API_TOKEN: ${{ secrets.LAB_SECRET }}
+    steps:
+      - name: Process
+        run: |
+          CMD="${{ needs.parse.outputs.command }}"
+          echo "Processing: $CMD"
